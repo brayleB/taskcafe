@@ -16,6 +16,7 @@ services:
       - taskcafe-uploads:/root/uploads
       
   postgres:
+    container_name: local_pgdb
     image: postgres:12.3-alpine
     restart: always
     networks:
@@ -27,11 +28,25 @@ services:
     volumes:
       - taskcafe-postgres:/var/lib/postgresql/data
 
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin4_container
+    restart: always
+    ports:
+      - "5050:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: user@email.com
+      PGADMIN_DEFAULT_PASSWORD: StrongPassword
+    networks:
+      - taskcafe-test
+    volumes:
+      - pgadmin-data:/var/lib/pgadmin
+
 volumes:
   taskcafe-postgres:
-    external: false
   taskcafe-uploads:
     external: false
+  pgadmin-data:
 
 networks:
   taskcafe-test:
